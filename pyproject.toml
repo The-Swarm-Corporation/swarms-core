@@ -1,3 +1,4 @@
+
 [build-system]
 requires = [
     'maturin>=1,<2',
@@ -5,12 +6,14 @@ requires = [
 ]
 build-backend = 'maturin'
 
-[tool.poetry]
+[project]
 name = "swarms-core"
 version = "0.0.2"
 description = "Swarms Core - Python"
 license = "MIT"
-authors = ["Kye Gomez <kye@apac.ai>"]
+authors = [
+    {name = 'Kye Gomez', email = 'kye@apac.ai'}
+]
 homepage = "https://github.com/kyegomez/swarms-core"
 documentation = "https://github.com/kyegomez/swarms-core"  # Add this if you have documentation.
 readme = "README.md"  
@@ -43,11 +46,11 @@ Funding = 'https://github.com/sponsors/kyegomez'
 Source = 'https://github.com/kyegomez/swarms-core'
 
 
-[tool.poetry.dependencies]
+[dependencies]
 python = "^3.6"
 swarms = "*"
 
-[tool.poetry.dev-dependencies]
+[dev-dependencies]
 pytest = "^6.2.4"
 pytest-benchmark = "^3.4.1"
 maturin = "*"
@@ -84,7 +87,7 @@ preview = true
 
 [tool.maturin]
 python-source = "python"
-module-name = "swarms_core._main"
+module-name = "swarms_core.pyrust_parallel"
 bindings = 'pyo3'
 features = ["pyo3/extension-module"]
 include = [{ path = "path/**/*", format = "sdist" }]
