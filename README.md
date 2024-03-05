@@ -1,64 +1,73 @@
-[![Multi-Modality](agorabanner.png)](https://discord.gg/qUtxnK2NMf)
+# swarms-core
 
-# Python Package Template
-A easy, reliable, fluid template for python packages complete with docs, testing suites, readme's, github workflows, linting and much much more
+[![CI](https://github.com/kyegomez/swarms-core/workflows/ci/badge.svg?event=push)](https://github.com/kyegomez/swarms-core/actions?query=event%3Apush+branch%3Amain+workflow%3Aci)
+[![Coverage](https://codecov.io/gh/kyegomez/swarms-core/branch/main/graph/badge.svg)](https://codecov.io/gh/kyegomez/swarms-core)
+[![pypi](https://img.shields.io/pypi/v/swarms-core.svg)](https://pypi.python.org/pypi/swarms-core)
+[![versions](https://img.shields.io/pypi/pyversions/swarms-core.svg)](https://github.com/kyegomez/swarms-core)
+[![license](https://img.shields.io/github/license/kyegomez/swarms-core.svg)](https://github.com/kyegomez/swarms-core/blob/main/LICENSE)
+
+This package provides the core functionality for [Swarms](https://github.com/kyegomez/swarms) exeuction strategies utilizing RUST.
 
 
-## Installation
+# Install
+`pip3 install -U swarms-core`
 
-You can install the package using pip
+
+
+## Getting Started
+
+You'll need rust stable [installed](https://rustup.rs/), or rust nightly if you want to generate accurate coverage.
+
+With rust and python 3.8+ installed, compiling swarms-core should be possible with roughly the following:
 
 ```bash
-pip install -e .
+# clone this repo or your fork
+git clone git@github.com:kyegomez/swarms-core.git
+cd swarms-core
+# create a new virtual env
+python3 -m venv env
+source env/bin/activate
+# install dependencies and install swarms-core
+make install
 ```
 
-# Usage
-```python
-print("hello world")
+That should be it, the example shown above should now run.
 
+You might find it useful to look at [`python/pydantic_core/_pydantic_core.pyi`](./python/pydantic_core/_pydantic_core.pyi) and
+[`python/pydantic_core/core_schema.py`](./python/pydantic_core/core_schema.py) for more information on the python API,
+beyond that, [`tests/`](./tests) provide a large number of examples of usage.
+
+If you want to contribute to swarms-core, you'll want to use some other make commands:
+* `make build-dev` to build the package during development
+* `make build-prod` to perform an optimised build for benchmarking
+* `make test` to run the tests
+* `make testcov` to run the tests and generate a coverage report
+* `make lint` to run the linter
+* `make format` to format python and rust code
+* `make` to run `format build-dev lint test`
+
+## Test Profiling
+
+It's possible to profile the code using the [`flamegraph` utility from `flamegraph-rs`](https://github.com/flamegraph-rs/flamegraph). (Tested on Linux.) You can install this with `cargo install flamegraph`.
+
+Run `make build-profiling` to install a release build with debugging symbols included (needed for profiling).
+
+Once that is built, you can profile pytest benchmarks with (e.g.):
+
+```bash
+flamegraph -- pytest tests/benchmarks/test_micro_benchmarks.py -k test_list_of_ints_core_py --benchmark-enable
 ```
+The `flamegraph` command will produce an interactive SVG at `flamegraph.svg`.
 
+## Releasing
 
-
-### Code Quality 🧹
-
-- `make style` to format the code
-- `make check_code_quality` to check code quality (PEP8 basically)
-- `black .`
-- `ruff . --fix`
-
-### Tests 🧪
-
-[`pytests`](https://docs.pytest.org/en/7.1.x/) is used to run our tests.
-
-### Publish on PyPi 🚀
-
-**Important**: Before publishing, edit `__version__` in [src/__init__](/src/__init__.py) to match the wanted new version.
-
-```
-poetry build
-poetry publish
-```
-
-### CI/CD 🤖
-
-We use [GitHub actions](https://github.com/features/actions) to automatically run tests and check code quality when a new PR is done on `main`.
-
-On any pull request, we will check the code quality and tests.
-
-When a new release is created, we will try to push the new code to PyPi. We use [`twine`](https://twine.readthedocs.io/en/stable/) to make our life easier. 
-
-The **correct steps** to create a new realease are the following:
-- edit `__version__` in [src/__init__](/src/__init__.py) to match the wanted new version.
-- create a new [`tag`](https://git-scm.com/docs/git-tag) with the release name, e.g. `git tag v0.0.1 && git push origin v0.0.1` or from the GitHub UI.
-- create a new release from GitHub UI
-
-The CI will run when you create the new release.
-
-# Docs
-We use MK docs. This repo comes with the zeta docs. All the docs configurations are already here along with the readthedocs configs.
-
-
-
-# License
-MIT
+1. Bump package version locally. Do not just edit `Cargo.toml` on Github, you need both `Cargo.toml` and `Cargo.lock` to be updated.
+2. Make a PR for the version bump and merge it.
+3. Go to https://github.com/kyegomez/swarms-core/releases and click "Draft a new release"
+4. In the "Choose a tag" dropdown enter the new tag `v<the.new.version>` and select "Create new tag on publish" when the option appears.
+5. Enter the release title in the form "v<the.new.version> <YYYY-MM-DD>"
+6. Click Generate release notes button
+7. Click Publish release
+8. Go to https://github.com/kyegomez/swarms-core/actions and ensure that all build for release are done successfully.
+9. Go to https://pypi.org/project/swarms-core/ and ensure that the latest release is published.
+10. Done 🎉

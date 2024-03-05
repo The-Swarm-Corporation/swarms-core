@@ -1,34 +1,52 @@
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = [
+    'maturin>=1,<2',
+    'typing-extensions >=4.6.0,!=4.7.0'
+]
+build-backend = 'maturin'
 
 [tool.poetry]
-name = "paper"
+name = "swarms-core"
 version = "0.0.1"
-description = "Paper - Pytorch"
+description = "Swarms Core - Python"
 license = "MIT"
 authors = ["Kye Gomez <kye@apac.ai>"]
-homepage = "https://github.com/kyegomez/paper"
-documentation = "https://github.com/kyegomez/paper"  # Add this if you have documentation.
+homepage = "https://github.com/kyegomez/swarms-core"
+documentation = "https://github.com/kyegomez/swarms-core"  # Add this if you have documentation.
 readme = "README.md"  # Assuming you have a README.md
-repository = "https://github.com/kyegomez/paper"
+repository = "https://github.com/kyegomez/swarms-core"
 keywords = ["artificial intelligence", "deep learning", "optimizers", "Prompt Engineering"]
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3.9"
+    'Development Status :: 3 - Alpha',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3 :: Only',
+    'Programming Language :: Python :: 3.8',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+    'Programming Language :: Python :: 3.11',
+    'Programming Language :: Python :: 3.12',
+    'Programming Language :: Rust',
+    'Framework :: Swarms',
+    'Intended Audience :: Developers',
+    'Intended Audience :: Information Technology',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: POSIX :: Linux',
+    'Operating System :: Microsoft :: Windows',
+    'Operating System :: MacOS',
+    'Typing :: Typed',
 ]
+
+[project.urls]
+Homepage = 'https://github.com/kyegomes/swarms-core'
+Funding = 'https://github.com/sponsors/kyegomez'
+Source = 'https://github.com/kyegomez/swarms-core'
+
 
 [tool.poetry.dependencies]
 python = "^3.6"
 swarms = "*"
 zetascale = "*"
-
-[tool.poetry.dev-dependencies]
-# Add development dependencies here
-
 
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.1.6"
@@ -55,3 +73,50 @@ line-length = 70
 line-length = 70
 target-version = ['py38']
 preview = true
+
+
+
+
+[tool.maturin]
+python-source = "python"
+module-name = "pydantic_core._pydantic_core"
+bindings = 'pyo3'
+features = ["pyo3/extension-module"]
+
+[tool.ruff.lint]
+extend-select = ['Q', 'RUF100', 'C90', 'I']
+extend-ignore = [
+    'E721',  # using type() instead of isinstance() - we use this in tests
+]
+flake8-quotes = {inline-quotes = 'single', multiline-quotes = 'double'}
+mccabe = { max-complexity = 13 }
+isort = { known-first-party = ['pydantic_core', 'tests'] }
+
+[tool.ruff.format]
+quote-style = 'single'
+
+[tool.pytest.ini_options]
+testpaths = 'tests'
+log_format = '%(name)s %(levelname)s: %(message)s'
+timeout = 30
+xfail_strict = true
+# min, max, mean, stddev, median, iqr, outliers, ops, rounds, iterations
+addopts = [
+    '--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations',
+    '--benchmark-group-by', 'group',
+    '--benchmark-warmup', 'on',
+    '--benchmark-disable',  # this is enable by `make benchmark` when you actually want to run benchmarks
+]
+
+[tool.coverage.run]
+source = ['pydantic_core']
+branch = true
+
+[tool.coverage.report]
+precision = 2
+exclude_lines = [
+    'pragma: no cover',
+    'raise NotImplementedError',
+    'if TYPE_CHECKING:',
+    '@overload',
+]
