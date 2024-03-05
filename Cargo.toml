@@ -16,7 +16,7 @@ include = [
     "/rust-toolchain",
     "/src",
     "!/src/self_schema.py",
-    "/python/pydantic_core",
+    "/python/swarms_core",
     "/tests",
     "/.cargo",
     "!__pycache__",
@@ -34,7 +34,7 @@ smallvec = "1.13.1"
 base64 = "0.21.7"
 
 [lib]
-name = "_pydantic_core"
+name = "_main"
 crate-type = ["cdylib", "rlib"]
 
 [features]
