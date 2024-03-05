@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := all
-sources = python/pydantic_core tests generate_self_schema.py wasm-preview/run_tests.py
+sources = python/swarms_core tests generate_self_schema.py wasm-preview/run_tests.py
 
-mypy-stubtest = python -m mypy.stubtest pydantic_core._pydantic_core --allowlist .mypy-stubtest-allowlist
+mypy-stubtest = python -m mypy.stubtest swarms_core._main --allowlist .mypy-stubtest-allowlist
 
 # using pip install cargo (via maturin via pip) doesn't get the tty handle
 # so doesn't render color without some help
@@ -28,7 +28,7 @@ install-rust-coverage:
 
 .PHONY: build-dev
 build-dev:
-	@rm -f python/pydantic_core/*.so
+	@rm -f python/swarms_core/*.so
 ifneq ($(USE_MATURIN),)
 	maturin develop
 else
@@ -37,7 +37,7 @@ endif
 
 .PHONY: build-prod
 build-prod:
-	@rm -f python/pydantic_core/*.so
+	@rm -f python/swarms_core/*.so
 ifneq ($(USE_MATURIN),)
 	maturin develop --release
 else
@@ -46,7 +46,7 @@ endif
 
 .PHONY: build-profiling
 build-profiling:
-	@rm -f python/pydantic_core/*.so
+	@rm -f python/swarms_core/*.so
 ifneq ($(USE_MATURIN),)
 	maturin develop --profile profiling
 else
@@ -55,7 +55,7 @@ endif
 
 .PHONY: build-coverage
 build-coverage:
-	@rm -f python/pydantic_core/*.so
+	@rm -f python/swarms_core/*.so
 ifneq ($(USE_MATURIN),)
 	RUSTFLAGS='-C instrument-coverage' maturin develop --release
 else
@@ -64,7 +64,7 @@ endif
 
 .PHONY: build-pgo
 build-pgo:
-	@rm -f python/pydantic_core/*.so
+	@rm -f python/swarms_core/*.so
 	$(eval PROFDATA := $(shell mktemp -d))
 ifneq ($(USE_MATURIN),)
 	RUSTFLAGS='-Cprofile-generate=$(PROFDATA)' maturin develop --release
@@ -99,7 +99,7 @@ lint-python:
 	ruff check $(sources)
 	ruff format --check $(sources)
 	$(mypy-stubtest)
-	griffe dump -f -d google -LWARNING -o/dev/null python/pydantic_core
+	griffe dump -f -d google -LWARNING -o/dev/null python/swarms_core
 
 .PHONY: lint-rust
 lint-rust:
@@ -126,7 +126,7 @@ testcov: build-coverage
 	coverage run -m pytest
 	coverage report
 	coverage html -d htmlcov/python
-	coverage-prepare html python/pydantic_core/*.so
+	coverage-prepare html python/swarms_core/*.so
 
 .PHONY: all
 all: format build-dev lint test
@@ -161,4 +161,4 @@ clean:
 	rm -f .coverage.*
 	rm -rf build
 	rm -rf perf.data*
-	rm -rf python/pydantic_core/*.so
+	rm -rf python/swarms_core/*.so

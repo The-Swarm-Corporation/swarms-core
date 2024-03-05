@@ -7,7 +7,7 @@ build-backend = 'maturin'
 
 [tool.poetry]
 name = "swarms-core"
-version = "0.0.1"
+version = "0.0.2"
 description = "Swarms Core - Python"
 license = "MIT"
 authors = ["Kye Gomez <kye@apac.ai>"]
@@ -46,7 +46,12 @@ Source = 'https://github.com/kyegomez/swarms-core'
 [tool.poetry.dependencies]
 python = "^3.6"
 swarms = "*"
-zetascale = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.4"
+pytest-benchmark = "^3.4.1"
+maturin = "*"
+
 
 [tool.poetry.group.lint.dependencies]
 ruff = "^0.1.6"
@@ -79,9 +84,10 @@ preview = true
 
 [tool.maturin]
 python-source = "python"
-module-name = "pydantic_core._pydantic_core"
+module-name = "swarms_core._main"
 bindings = 'pyo3'
 features = ["pyo3/extension-module"]
+include = [{ path = "path/**/*", format = "sdist" }]
 
 [tool.ruff.lint]
 extend-select = ['Q', 'RUF100', 'C90', 'I']
@@ -90,7 +96,7 @@ extend-ignore = [
 ]
 flake8-quotes = {inline-quotes = 'single', multiline-quotes = 'double'}
 mccabe = { max-complexity = 13 }
-isort = { known-first-party = ['pydantic_core', 'tests'] }
+isort = { known-first-party = ['swarms_core', 'tests'] }
 
 [tool.ruff.format]
 quote-style = 'single'
@@ -109,7 +115,7 @@ addopts = [
 ]
 
 [tool.coverage.run]
-source = ['pydantic_core']
+source = ['swarms_core']
 branch = true
 
 [tool.coverage.report]
