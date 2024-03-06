@@ -92,30 +92,30 @@ bindings = 'pyo3'
 features = ["pyo3/extension-module"]
 include = [{ path = "path/**/*", format = "sdist" }]
 
-[tool.ruff.lint]
-extend-select = ['Q', 'RUF100', 'C90', 'I']
-extend-ignore = [
-    'E721',  # using type() instead of isinstance() - we use this in tests
-]
-flake8-quotes = {inline-quotes = 'single', multiline-quotes = 'double'}
-mccabe = { max-complexity = 13 }
-isort = { known-first-party = ['swarms_core', 'tests'] }
+# [tool.ruff.lint]
+# extend-select = ['Q', 'RUF100', 'C90', 'I']
+# extend-ignore = [
+#     'E721',  # using type() instead of isinstance() - we use this in tests
+# ]
+# flake8-quotes = {inline-quotes = 'single', multiline-quotes = 'double'}
+# mccabe = { max-complexity = 13 }
+# isort = { known-first-party = ['swarms_core', 'tests'] }
 
-[tool.ruff.format]
-quote-style = 'single'
+# [tool.ruff.format]
+# quote-style = 'single'
 
-[tool.pytest.ini_options]
-testpaths = 'tests'
-log_format = '%(name)s %(levelname)s: %(message)s'
-timeout = 30
-xfail_strict = true
-# min, max, mean, stddev, median, iqr, outliers, ops, rounds, iterations
-addopts = [
-    '--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations',
-    '--benchmark-group-by', 'group',
-    '--benchmark-warmup', 'on',
-    '--benchmark-disable',  # this is enable by `make benchmark` when you actually want to run benchmarks
-]
+# [tool.pytest.ini_options]
+# testpaths = 'tests'
+# log_format = '%(name)s %(levelname)s: %(message)s'
+# timeout = 30
+# xfail_strict = true
+# # min, max, mean, stddev, median, iqr, outliers, ops, rounds, iterations
+# addopts = [
+#     '--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations',
+#     '--benchmark-group-by', 'group',
+#     '--benchmark-warmup', 'on',
+#     '--benchmark-disable',  # this is enable by `make benchmark` when you actually want to run benchmarks
+# ]
 
 [tool.coverage.run]
 source = ['swarms_core']

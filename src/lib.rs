@@ -10,7 +10,6 @@ fn execute_in_parallel(py: Python, py_func: PyObject, n: usize) -> PyResult<Vec<
     // Use Rayon to execute the Python function in parallel
     let results: Result<Vec<_>, _> = (0..n).into_par_iter()
         .map(|_| {
-            // Temporarily release the GIL and execute the function in a new thread
             Python::with_gil(|py| {
                 // Safely call the Python function and convert the result back to PyObject
                 py_func.call1(py, ()).map(|res| res.to_object(py))
@@ -18,7 +17,7 @@ fn execute_in_parallel(py: Python, py_func: PyObject, n: usize) -> PyResult<Vec<
         })
         .collect();
 
-    results
+    results.map_err(|e| e.into())
 }
 
 /// A Python module implemented in Rust.
